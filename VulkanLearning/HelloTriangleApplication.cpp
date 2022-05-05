@@ -25,6 +25,7 @@ void HelloTriangleApplication::InitWindow()
 void HelloTriangleApplication::InitVulkan()
 {
 	CreateInstance();
+	SetupDebugMessenger();
 }
 
 void HelloTriangleApplication::MainLoop()
@@ -76,7 +77,7 @@ void HelloTriangleApplication::CreateInstance()
 		createInfo.ppEnabledLayerNames = validationLayers.data();
 	}
 	else {
-		createInfo.enabledLayerCount = 0
+		createInfo.enabledLayerCount = 0;
 	}
 
 	// Check for supported extensions list
@@ -97,7 +98,9 @@ void HelloTriangleApplication::CreateInstance()
 	if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS)
 		throw std::runtime_error("failed to create instance.");
 
-
+	auto messageExtensions = GetRequiredExtentions();
+	createInfo.enabledExtensionCount = static_cast<uint32_t>(messageExtensions.size());
+	createInfo.ppEnabledExtensionNames = messageExtensions.data();
 }
 
 bool HelloTriangleApplication::CheckValidationLayerSupport()
@@ -127,4 +130,35 @@ bool HelloTriangleApplication::CheckValidationLayerSupport()
 			return false;
 	}
 	return true;
+}
+
+std::vector<const char*> HelloTriangleApplication::GetRequiredExtentions()
+{
+	uint32_t glfwExtensionsCount = 0;
+	const char** glfwExtensions;
+	glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionsCount);
+
+	std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionsCount);
+
+	if (enableValidationLayers)
+		extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+
+	return extensions;
+}
+
+VKAPI_ATTR VkBool32 VKAPI_CALL HelloTriangleApplication::DebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData)
+{
+	std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
+
+	return VK_FALSE;
+}
+
+void HelloTriangleApplication::PopulateDebugMessengerCreateInfo()
+{
+	VkDebugUtilsMessengerCreateInfoEXT createInfo{};
+	createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+	createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT;
+	createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+	createInfo.pfnUserCallback = DebugCallback;
+	createInfo.pUserData = nullptr;
 }

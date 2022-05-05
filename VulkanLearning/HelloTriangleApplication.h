@@ -23,6 +23,7 @@ private:
 	const uint32_t HEIGHT = 600;
 
 	VkInstance instance;
+	VkDebugUtilsMessengerEXT debugMessenger;
 
 	// Validation Layers for Vulkan
 	const std::vector<const char*> validationLayers = {
@@ -34,5 +35,16 @@ private:
 #else
 	const bool enableValidationLayers = true;
 #endif
+
+	std::vector<const char*> GetRequiredExtentions();
+
+	static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
+		VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+		VkDebugUtilsMessageTypeFlagsEXT messageType,
+		const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+		void* pUserData);
+
+	void SetupDebugMessenger() { if (!enableValidationLayers) return; }
+	void PopulateDebugMessengerCreateInfo();
 };
 
