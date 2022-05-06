@@ -23,4 +23,4 @@ int main()
 }
 
 // TUTORIAL LEFT AT:
-// Validation Layers: Message Callback - CreateDebugUtilsMessengerEXT
+// Validation Layers: 

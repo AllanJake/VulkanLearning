@@ -4,6 +4,15 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 
+VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger)
+{
+	auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
+	if (func != nullptr)
+		return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
+	else
+		return VK_ERROR_EXTENSION_NOT_PRESENT;
+}
+
 class HelloTriangleApplication
 {
 public:
@@ -23,7 +32,9 @@ private:
 	const uint32_t HEIGHT = 600;
 
 	VkInstance instance;
+	//VkInstanceCreateInfo createInfo{};
 	VkDebugUtilsMessengerEXT debugMessenger;
+
 
 	// Validation Layers for Vulkan
 	const std::vector<const char*> validationLayers = {
@@ -44,7 +55,7 @@ private:
 		const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
 		void* pUserData);
 
-	void SetupDebugMessenger() { if (!enableValidationLayers) return; }
+	void SetupDebugMessenger();
 	void PopulateDebugMessengerCreateInfo();
 };
 

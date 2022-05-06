@@ -55,6 +55,7 @@ void HelloTriangleApplication::CreateInstance()
 	appInfo.apiVersion = VK_API_VERSION_1_0;
 
 	VkInstanceCreateInfo createInfo{};
+	
 	createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 	createInfo.pApplicationInfo = &appInfo;
 	uint32_t glfwExtensionCount = 0;
@@ -151,6 +152,17 @@ VKAPI_ATTR VkBool32 VKAPI_CALL HelloTriangleApplication::DebugCallback(VkDebugUt
 	std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
 
 	return VK_FALSE;
+}
+
+void HelloTriangleApplication::SetupDebugMessenger()
+{
+	if (!enableValidationLayers) 
+		return;
+
+	/*if (CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger) != VK_SUCCESS)
+	{
+		throw std::runtime_error("Failed to set up debug messenger");
+	}*/
 }
 
 void HelloTriangleApplication::PopulateDebugMessengerCreateInfo()

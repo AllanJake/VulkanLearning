@@ -1,5 +1,6 @@
 ﻿  HelloTriangleApplication.cpp
   main.cpp
   Generating Code...
+main.obj : error LNK2005: "enum VkResult __cdecl CreateDebugUtilsMessengerEXT(struct VkInstance_T *,struct VkDebugUtilsMessengerCreateInfoEXT const *,struct VkAllocationCallbacks const *,struct VkDebugUtilsMessengerEXT_T * *)" (?CreateDebugUtilsMessengerEXT@@YA?AW4VkResult@@PEAUVkInstance_T@@PEBUVkDebugUtilsMessengerCreateInfoEXT@@PEBUVkAllocationCallbacks@@PEAPEAUVkDebugUtilsMessengerEXT_T@@@Z) already defined in HelloTriangleApplication.obj
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-  VulkanLearning.vcxproj -> C:\Users\Jake\Documents\GitHub\VulkanLearning\x64\Debug\VulkanLearning.exe
+C:\Users\Jake\Documents\GitHub\VulkanLearning\x64\Debug\VulkanLearning.exe : fatal error LNK1169: one or more multiply defined symbols found
